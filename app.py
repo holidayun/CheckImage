@@ -17,14 +17,15 @@ class CheckBrockImage(object):
                 os.makedirs("./images_detection/"  + item)
             imgType = imghdr.what(self.train_dir + file)
             # if imgType.lower() == 'jpg' or imgType.lower() == "jpeg":
-            if os.path.splitext(file)[1].lower() == '.jpg' or os.path.splitext(file)[1].lower() == ".jpeg":
-                ret = self.check_img_jpg(file)
-                if ret:
-                    self.completeFile += 1
-                else:
-                    shutil.copy(self.train_dir + file, "./error_img/" + file)
-                    self.incompleteFile = self.incompleteFile + 1
-                    self.img_remove(file)  # 删除不完整图片 삭제하고 옮긴다. 그대로 두고 싶으면 # 할것  
+            if imgType == None or imgType == "jpeg":
+                if os.path.splitext(file)[1].lower() == '.jpg' or os.path.splitext(file)[1].lower() == ".jpeg":
+                    ret = self.check_img_jpg(file)
+                    if ret:
+                        self.completeFile += 1
+                    else:
+                        shutil.copy(self.train_dir + file, "./error_img/" + file)
+                        self.incompleteFile = self.incompleteFile + 1
+                        self.img_remove(file)  # 删除不完整图片 삭제하고 옮긴다. 그대로 두고 싶으면 # 할것  
             elif imgType.lower() == 'png':
                 ret = self.check_img_png(file)
                 if ret:
@@ -72,7 +73,7 @@ class CheckImage(object):
         """检测png图片完整性，完整返回True，不完整返回False"""
 
         buf = self.img_text
-        return buf.endswith(b'\xaeB`\x82')
+        return buf.endswith(b'\x60\x82')
 
 
 if __name__ == '__main__':
